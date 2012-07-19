@@ -58,8 +58,8 @@ static bool IsolateCreate(const char* name, const char* main, void* data, char**
   Dart_Isolate isolate = Dart_CreateIsolate(name, main, cfg->master_snapshot.buffer, data, error);
   if (!isolate) return false;
   Dart_EnterScope();
-  Builtin::SetNativeResolver(Builtin::kBuiltinLibrary);
-  Builtin::SetNativeResolver(Builtin::kIOLibrary);
+  Dart_SetNativeResolver(Builtin::kBuiltinLibrary);
+  Dart_SetNativeResolver(Builtin::kIOLibrary);
   return true;
 }
 
