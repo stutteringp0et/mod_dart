@@ -243,7 +243,7 @@ static dart_snapshot *getScriptSnapshot(request_rec *r) {
 static bool initializeState = false;
 static void dart_child_init(apr_pool_t *p, server_rec *s) {
   // This is allowed to fail, we may have already initialized the VM for snapshot creation
-  initializeState |= (Dart_SetVMFlags(0, NULL) && Dart_Initialize(IsolateCreate, IsolateInterrupt));
+  initializeState |= (Dart_SetVMFlags(0, NULL) && Dart_Initialize(IsolateCreate, IsolateInterrupt, NULL));
 }
 
 static int fatal(request_rec *r, const char *format, Dart_Handle error) {
@@ -342,7 +342,7 @@ int dart_snapshots(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, serve
   // Only create snapshots in the root server
   dart_server_config *cfg = (dart_server_config*) ap_get_module_config(server->module_config, &dart_module);
   if (cfg->base) return OK;
-  initializeState = Dart_SetVMFlags(0, NULL) && Dart_Initialize(IsolateCreate, IsolateInterrupt);
+  initializeState = Dart_SetVMFlags(0, NULL) && Dart_Initialize(IsolateCreate, IsolateInterrupt, NULL);
 
   char* error;
   if (!create_snapshot(server->process->pool, &(cfg->master_snapshot), "master", NULL, create_master_snapshot, &error)) {
